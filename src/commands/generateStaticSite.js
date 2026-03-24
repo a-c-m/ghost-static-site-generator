@@ -7,6 +7,7 @@ const copy404PageHelper = require('../helpers/copy404PageHelper');
 const removeQueryStringsHelper = require('../helpers/removeQueryStringsHelper');
 const responsiveImagesHelper = require('../helpers/responsiveImagesHelper/responsiveImagesHelper');
 const replaceUrlHelper = require('../helpers/replaceUrlHelper');
+const fetchMetaImagesHelper = require('../helpers/fetchMetaImagesHelper');
 const OPTIONS = require('../constants/OPTIONS');
 
 const generateStaticSite = async () => {
@@ -34,6 +35,7 @@ const generateStaticSite = async () => {
       `${OPTIONS.SOURCE_DOMAIN}/assets/built/screen.css`,
 	  `${OPTIONS.SOURCE_DOMAIN}/assets/built/casper.js`,
 	  `${OPTIONS.SOURCE_DOMAIN}/assets/built/global.css`,
+      `${OPTIONS.SOURCE_DOMAIN}/rss/`,
     ];
 
     if(OPTIONS.SOURCE_DOMAIN.startsWith("http://127.0.0.1")){
@@ -50,6 +52,11 @@ const generateStaticSite = async () => {
      * Generate all missing responsive images
      */
     responsiveImagesHelper();
+
+    /**
+     * Fetch images referenced in og:image and twitter:image meta tags
+     */
+    fetchMetaImagesHelper(absoluteStaticPath);
 
     /**
      * Remove all query strings = file names
